@@ -1,0 +1,420 @@
+
+<!DOCTYPE markdown>
+
+hints and tips
+
+<!-- ** Media Queries via calling stylesheets ** -->
+<link rel ="stylesheet" href="styles.css"
+
+<link rel="stylesheet" media="screen and (min-width:500px)" href="over500.css">
+<!-- ** Applies stylsheet "over500.css" to the page when the browser width is over 500px** -->
+
+<!-- Media Queries via embedding Note: to embed in HTML we must add a style attribute first-->
+<style type="text/css">
+        h1 @media screen and (min-width: 500px) {body {background-color: green; }}
+
+</style>
+
+<!-- Complex media queries -->
+<style type="text/css">
+        @media screen and (min-width: 500px) and (max-width: 600px) {
+        .yes {
+            opacity: 1;
+        }
+        .no {
+            opacity: 0;
+        }
+    }
+</style>
+<!-- this media query above calls the .yes class when the screen width is between 500 and 600 px. Otherwise it calls the .no class NOTE: this assumes that a stylesheet has already been referenced using the .yes and .no classes-->
+
+<!-- Flexboxes  -->
+<!-- Flexbox containers -->
+<style type="text/css">
+    .container {    /* calling the container class and opening curleys for the proprties *** important note, it does not need to be called container(just something that contains all divs belwo it)*** */
+        width: 100%; /* set width to 100% (responsive) */
+        display: flex; /* adding this alone will just always display in a row..box..box..box */
+        flex-wrap: wrap; /* adding the wrapping here lets the boxes wrap when the drowser x-axis gets too small */
+    }
+</style>
+
+<!-- Flexbox Order -->
+
+<div class="title">
+    "Flex Item: "
+    <code>order</code>
+</div>
+<div class="container">
+    <div class="box dark_blue"></div>
+    <div class="box light_blue"></div>
+    <div class="box green"></div>
+    <div class="box orange"></div>
+    <div class="box red"></div>
+</div>
+<!-- the above sets the html to apply order to the display of the boxes based upon what condition is met (screen min width in this case) in the css -->
+<style type="text/css">
+    @media screen and (min-width: 700px) {
+        .dark_blue { order: 4; }
+        .light_blue { order: 5; }
+        .green { order: 2; }
+        .orange { order: 3; }
+        .red {order: 1;}
+    }
+</style>
+<!-- this is the css that changes the order based upon the screen size (note held within <style> elements to doisplay on this file) -->
+
+<!-- Responsive patterns "Column Drop" -->
+<div class="container">
+    <div class="box dark_blue"></div>
+    <div class="box light_blue"></div>
+    <div class="box green"></div>
+</div>
+<!-- puts the boxes withing the container -->
+
+<style type="text/css">
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    /*sets wrapping on the boxes (see flexbox containers)*/
+    .box {
+        width: 100%;
+    }
+    /*sets initial box size to 100% (starting small on phoen)*/
+    @media screen and (min-width: 450px) {
+        .dark_blue {
+            width: 25%;
+        }
+        .light_blue {
+            width: 75%;
+        }
+    }
+    /*at BREAKPOINT =>450px dark blue will shrink to 25, light blue will align next to it at the remaining 75% on the line and the light blue (unchaned) will drop in below*/
+    @media screen and (min-width: 550px) {
+        .dark_blue, .green {
+            width: 25%;
+        }
+        .light_blue {
+            width: 50%;
+        }
+    }
+    /*at BREAKPOINT =>550px boxes 1 and 3 (Dark blue and Green) go to 25% each and sit either side of box 2 (light blue) all boxes take up a max width of 100% thus one row*/
+</style>
+
+<!-- Responsive patterns "Mostly fluid" -->
+<div class="container">
+    <div class="box dark_blue"></div>
+    <div class="box light_blue"></div>
+    <div class="box green"></div>
+    <div class="box red"></div>
+    <div class="box orange"></div>
+</div>
+<!-- puts the boxes withing the container -->
+
+<style type="text/css">
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    /*sets wrapping on the boxes (see flexbox containers)*/
+    .box {
+        width: 100%;
+    }
+    /*sets initial box size to 100% (starting small on phone)*/
+    @media screen and (min-width: 450px) {
+        .light_blue, .green {
+            width: 50%;
+        }
+    }
+    /*at BREAKPOINT =>450px light blue and green boxes move to 50% taking up one row the rest remain at 100%*/
+    @media screen and (min-width: 550px) {
+        .dark_blue, .light_blue {
+            width: 50%;
+        }
+        .green, .red, .orange {
+            width: 33.333333%;
+        }
+    }
+    /*at BREAKPOINT =>550px boxes 1 and 2 (Dark blue and light blue) go to 50% each and sit on the top row all remaining boxes take up a max width of 100% in three boxes of 33% thus one row*/
+    @media screen and (min-width: 700px) {
+        .container {
+            width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    /*at BREAKPOINT =>700px this the logic changes a little. we leave the layout as per the 550px BRAKPOINT but the width of the container restricts itself at 700px and starts to add Margins to the side*/
+</style>
+
+<!-- OFF CANVAS -->
+
+<nav id="drawer" class="dark_blue">
+</nav>
+
+<main class="light_blue">
+
+</main>
+<!-- these are the two elements that we will deal with, the NAV element and the MAIN element -->
+<style type="text/css">
+    html, body, main {
+        height: 100%;
+        width: 100%;
+    }
+    /*setting the style for the nav and body elements*/
+    nav {
+        width: 300px;
+        height: 100%;
+        position: absolute;
+        transform: translate(-300px, 0);  /* this moves the offscreen element in fromm -300 to 0*/
+        transition: transform 0.3s ease; /* this this dictates how this tranformation takes place*/
+    }
+    /*this sets the styles for the navigation element*/
+    nav.open {
+        -webkit-transform: translate(0,0);
+        transform: translate(0,0);
+    }
+    /*when the .open class is activated, the tranform brings the off canvas elements on canvas*/
+    @media screen and (min-width: 600px) {
+        nav {
+            position: relative;
+            transform: translate(0,0);
+        }
+        body {
+            display: flex;
+            flex-flow: row nowrap;
+        }
+        main {
+            width: auto;
+            flex-grow: 1;
+        }
+    }
+</style>
+
+<!-- GIT and GITHUB Comparing Files-->
+Comparing files:
+Opening command promt (Terminal) Finder>applications>Utilities>terminal
+navigation -- cd Documents/Udacity_course/Projects/GIT_and_GITHUB/JS_files
+Comapring Differences --  $ diff -u game_old.js game_new.js
+
+<!-- Sublime text route -->
+/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
+
+<!-- opening and editing bash profile -->
+touch ~/.bash_profile; open ~/.bash_profile
+
+<!-- creating files directories and files straight through Terminal to Sublime (this Rocks) -->
+cd ~                          # change directories to your home directory
+mkdir version-control         # make version-control directory
+cd version-control            # go to version-control directory
+mkdir reflections             # create reflections directory
+cd reflections                # go to reflections directory
+subl lesson_1_reflections.txt # launch sublime with file called lesson_1_reflections.txt (you can replace subl with another editor here if you prefer a different one)
+
+<!-- downloading repository "cloning" from GIT -->
+git clone https://github.com/udacity/asteroids.git
+
+<!-- checking the logs of the downloaded repository -->
+git log
+
+<!-- exiting git log -->
+simply press "q" for quit and go back to command prompt
+<!-- checking diffence between 2 commit ids -->
+git diff b0678b161fcf74467ed3a63110557e3d6229cfa6 f19cb1b80fe27e938e4d72770ca0a42f25e99ecc
+
+<!-- Checking out a vesrion to run in previous versions -->
+git checkout 25ede836903881848fea811df5b687b59d962da3 will check out this version of the file.
+
+<!-- Creating GIT repository -->
+To create a Git repository withing a directory, CD to the directory and type GIT Init -- this will create a git repository in the directory.
+
+<!-- checking the status of a directory -->
+To Check the status , type GIT status and it will list all the currect status
+
+<!-- adding a file to the directory -->
+touch <file> will add the file to the directory
+
+<!-- to commit to the staging area -->
+git add <filename> adds the file to the staging area
+
+<!-- to uncommit from the staging area -->
+git reset <filename> removes a file from the staging area
+
+<!-- Differences between Working Directory, Staging area and Repository -->
+git diff <id1> <id2> will compare the differences in the repository
+git diff (with no arguments) will compare differences in the Working Directory and thee Staging area
+git diff --staged will show me the changes stages that have not yet been committed to the repository
+
+<!-- removing changes in satging area BE VERY CAREFULL WITH THIS -->
+git reset --hard
+<!-- this is a non reversable change that takes it all away -->
+
+<!-- Creating branches -->git diff
+Firstly make sure you are on Master by using git checkout master
+Then -- git branch
+then -- git branch <name of branch>
+now when you run git branch it shows the master still checked out. to ensure changes only get saved to branch do the following --
+git checkout <name of branch>
+Now when I enter git branch again, the * shows against the <name of branch> branch
+
+<!-- Visualise the branch structure in git -->
+to see this type git log git--graph --oneline
+
+<!-- Merging branches -->
+to merge a branch. first checkout the master <git checkout master>
+then type <git merge <branch1 branch2 branchx>
+
+<!-- to shee changes between a commit and its parents -->
+git show
+
+<!-- to delete a branch after merging (the label) -->
+git branch -d <branchname>
+
+<!-- adding to a created git repository on github -->
+in the master of the file type : git remote add <name (usually origin)> git remote -v://github.com/jcwd/reflections.git (this is the example url I used for learning but the URL is available in the github area.
+
+To verufy it exists. type : git remote -v
+
+<!-- Pushing to GITHUB -->
+type this command :-- git push origin master
+
+<!-- pulling from GITHUB -->git
+type this command : -- git pull origin master
+
+<!-- to create a fork for cloning -->
+in the repository of the provider, click "fork"
+then navigate to own profile and you will see the repository created from the providor.
+CD to the directory you wish to clone to and type: git clone <pasted url>.git
+Then CD into the new repository on your terminal
+
+<!-- upsdating local copies without merge into master -->
+git fetch origin
+
+<!-- creating a new branch from terminal for changes to be reviewed via pull requests -->
+from master :-- git branch <branchname>
+then checkout the new branch
+make your change then you can Add and Commit as usual then Push to github (with the push, the origin is no longer master but the new <branchname>)
+
+<!-- finally to add folders via the terminal -->
+git add <foldername>/*
+
+<!-- Responsive Tables, Hidden Columns -->
+<tr>
+    <td>
+        <span class="shortName">TOR</span>
+        <span class="longName">Toronto Blue Jays</span>
+    </td>
+    <td class="inning">0</td>
+    <td class="inning">0</td>
+    <td class="inning">0</td>
+    <td class="inning">4</td>
+    <td class="inning">0</td>
+    <td class="inning">1</td>
+    <td class="inning">0</td>
+    <td class="inning">0</td>
+    <td class="inning">0</td>
+    <td class="final">5</td>
+</tr>
+
+<style type="text/css">
+    .longName {
+        display: none;
+    }
+    .inning {
+        display: none;
+    }
+</style>
+<!-- the above will (depending o conditions set in display size or @media query HIDE the longname and inning when the condition is met) -->
+
+<!-- no more tables technique this is being applied to the same table info in the example above-->
+
+<style type="text/css">
+    @media screen and (max-width: 500px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+        thead tr {
+            position: absolute;go
+            top: -9999px;
+            left: -9999px;
+            /* this potitions the header way offscreen rather than hiding*/
+        }
+        td {
+            position: relative;
+            padding-left: 50%;
+            /*this makes room for the header*/
+        }
+        td:before {
+            position: absolute;
+            left: 6px;
+            content: attr(data-th);
+            font-weight: bold;
+            /*this adds row labels*/
+        }
+</style>
+
+<!-- Contained tables -->
+
+<style type="text/css">
+    div.contained_table {
+        width: 100%
+        overflow-x: auto;
+        /* leaves the display of the table at 100% of the viewport and scorlls it within*/
+    }
+</style>
+
+<div class="contained_table">
+    <table>
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>1st</th>
+                <th>2nd</th>
+                <th>3rd</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<!-- this is the table that would be displayed with overflow withing the vieport -->
+
+<!-- limiting lines of text web optimal is 65 cpl and setting base fonts Minimum base font should be 16px and line height 1.2em To limit the length of lines you can set the word wrap default on your test editor to 70 !-->
+
+<style type="text/css">
+    font-size: 16px;
+    line-height: 1.2em;
+</style>
+
+
+<!-- responsive images -->
+<!-- relative sizing -->
+
+<style type="text/css">
+    img {
+        margin-right: 10 px;
+        width: calc((100% - 10px)/3);
+    }
+/* the above looks complex but actuall what it does is the fiollowing. sets width for three images to be 100% divided by three with the left image stuck to the left and the last one sticks to the righ through the "last of type rule" 20 px is the sum of the gaps between the pictures
+
+</style>
+
+<!-- sizing css usits for responsiveness -->
+
+<style type="text/css">
+    img {
+        height: 100vh;
+        width: 100vw;
+        /* sets the heigh and width of an image to 100% of the "VIEWPORT HEIGHT or WIDTH*/
+    }
+
+    img {
+        height: 100vmin;
+        width: 100vmin;
+        /* */
+    }
+
+    img {
+        height: 100vmax;
+        width: 100vmax;
+        /* sets the image to scale with the viewport without wierd strtching*/
+    }
+</style>
+
